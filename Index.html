@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Joyeux Noël !</title>
+    
+    <!-- External Libraries -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
+        /* ==================== FONTS ==================== */
         @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Great+Vibes&display=swap');
         
-        /* Animation de neige */
+        /* ==================== ANIMATIONS ==================== */
+        
+        /* Snow Animation */
         .snow {
             position: absolute;
             top: -10px;
@@ -32,7 +38,7 @@
             }
         }
         
-        /* Animation pour les étoiles */
+        /* Twinkle Animation */
         .twinkle {
             animation: twinkling 2s infinite alternate;
         }
@@ -42,7 +48,7 @@
             100% { opacity: 1; }
         }
         
-        /* Animation pour le message de Noël */
+        /* Fade In Up Animation */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -58,7 +64,7 @@
             animation: fadeInUp 1s ease-out forwards;
         }
         
-        /* Animation de pulsation pour le bouton */
+        /* Pulse Animation */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
@@ -69,6 +75,397 @@
             animation: pulse 2s infinite;
         }
         
+        /* Rotate Animation */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rotate-animation {
+            animation: rotate 3s linear infinite;
+        }
+        
+        /* Light Twinkle Animation */
+        @keyframes lightTwinkle {
+            0% { opacity: 0.4; box-shadow: 0 0 8px 2px; }
+            100% { opacity: 1; box-shadow: 0 0 20px 6px; }
+        }
+        
+        /* Shine Animation */
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* ==================== CARD STYLES ==================== */
+        
+        .christmas-card {
+            background: linear-gradient(135deg, #1a472a 0%, #0f2d1c 50%, #1a472a 100%);
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+            border: 4px solid #b91c1c;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .christmas-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                #b91c1c,
+                #b91c1c 15px,
+                #fbbf24 15px,
+                #fbbf24 30px,
+                #22c55e 30px,
+                #22c55e 45px
+            );
+            z-index: 10;
+        }
+        
+        /* ==================== CHRISTMAS LIGHTS ==================== */
+        
+        .christmas-light {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px 3px;
+            animation: lightTwinkle 1.5s infinite alternate;
+        }
+        
+        /* ==================== SHARE MODAL ==================== */
+        
+        .share-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .share-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .share-modal-content {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f2d1c 100%);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 550px;
+            border: 4px solid #b91c1c;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .share-modal.active .share-modal-content {
+            transform: scale(1);
+        }
+        
+        /* ==================== SHARE BUTTONS ==================== */
+        
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .whatsapp-btn {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+        }
+        
+        .facebook-btn {
+            background: linear-gradient(135deg, #1877F2 0%, #0C5FCD 100%);
+            color: white;
+        }
+        
+        .twitter-btn {
+            background: linear-gradient(135deg, #1DA1F2 0%, #0C7ABF 100%);
+            color: white;
+        }
+        
+        .email-btn {
+            background: linear-gradient(135deg, #EA4335 0%, #C5221F 100%);
+            color: white;
+        }
+        
+        .copy-link-btn {
+            background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+            color: white;
+        }
+
+        /* ==================== EFFECTS ==================== */
+        
+        .shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shine 3s infinite;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-900 via-purple-900 to-green-900 min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden">
+    
+    <!-- ==================== MAIN CONTAINER ==================== -->
+    <div class="w-full max-w-5xl flex flex-col items-center">
+        
+        <!-- ==================== HEADER ==================== -->
+        <header class="mb-8 text-center">
+            <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 shine" style="font-family: 'Mountains of Christmas', cursive; text-shadow: 0 0 20px rgba(255,215,0,0.5);">
+                <i class="fas fa-holly-berry text-red-500 mr-4 rotate-animation"></i>
+                Joyeux Noël
+                <i class="fas fa-holly-berry text-red-500 ml-4 rotate-animation"></i>
+            </h1>
+            <p class="text-2xl text-yellow-300 italic" style="font-family: 'Great Vibes', cursive; text-shadow: 0 0 10px rgba(255,215,0,0.3);">
+                Que la magie de Noël remplisse votre cœur de bonheur
+            </p>
+        </header>
+        
+        <!-- ==================== MAIN SECTION ==================== -->
+        <main class="w-full flex flex-col lg:flex-row items-center justify-center gap-8">
+            
+            <!-- ==================== NAME FORM ==================== -->
+            <div id="name-form" class="christmas-card p-10 w-full lg:w-1/2">
+                <div class="text-center mb-8">
+                    <i class="fas fa-snowflake text-blue-300 text-6xl mb-4 twinkle"></i>
+                    <h2 class="text-3xl font-bold text-white mb-3" style="font-family: 'Mountains of Christmas', cursive;">
+                        Partageons la joie de Noël !
+                    </h2>
+                    <p class="text-gray-200 text-lg">
+                        Entrez votre prénom pour recevoir un message personnalisé
+                    </p>
+                </div>
+                
+                <form id="christmas-form" class="space-y-6">
+                    <div>
+                        <label for="name" class="block text-xl font-medium text-white mb-3">
+                            <i class="fas fa-user text-red-400 mr-2"></i>
+                            Votre prénom
+                        </label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            class="w-full p-5 rounded-xl bg-white border-3 border-green-700 text-green-900 focus:outline-none focus:ring-4 focus:ring-yellow-400 focus:border-transparent text-xl font-semibold"
+                            placeholder="Ex: Marie, Pierre, Sophie..."
+                            required
+                        >
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full py-5 bg-gradient-to-r from-red-600 via-red-700 to-red-800 hover:from-red-700 hover:via-red-800 hover:to-red-900 text-white font-bold rounded-xl shadow-2xl text-2xl pulse flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105"
+                    >
+                        <i class="fas fa-gift text-3xl"></i>
+                        Recevoir mon message de Noël
+                        <i class="fas fa-gift text-3xl"></i>
+                    </button>
+                </form>
+                
+                <!-- Music Controls -->
+                <div class="mt-8 flex items-center justify-center space-x-4 bg-white/10 p-4 rounded-xl">
+                    <button id="play-music" class="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full transition-all transform hover:scale-110 shadow-lg">
+                        <i class="fas fa-play text-2xl"></i>
+                    </button>
+                    <button id="pause-music" class="bg-yellow-500 hover:bg-yellow-600 text-white p-4 rounded-full transition-all transform hover:scale-110 shadow-lg">
+                        <i class="fas fa-pause text-2xl"></i>
+                    </button>
+                    <button id="stop-music" class="bg-red-500 hover:bg-red-600 text-white p-4 rounded-full transition-all transform hover:scale-110 shadow-lg">
+                        <i class="fas fa-stop text-2xl"></i>
+                    </button>
+                    <span class="text-white text-xl font-semibold">🎵 Vive le vent</span>
+                </div>
+            </div>
+            
+            <!-- ==================== CHRISTMAS CARD ==================== -->
+            <div id="christmas-card" class="christmas-card p-10 w-full lg:w-1/2 hidden">
+                <div class="text-center mb-8">
+                    <i class="fas fa-star text-yellow-300 text-6xl mb-4 twinkle"></i>
+                    <h2 class="text-4xl font-bold text-white mb-4" style="font-family: 'Mountains of Christmas', cursive;">
+                        Bonjour, <span id="user-name" class="text-yellow-300"></span> !
+                    </h2>
+                    <div class="text-5xl font-bold text-red-400 my-6 fade-in-up pulse" style="font-family: 'Mountains of Christmas', cursive; text-shadow: 0 0 15px rgba(239, 68, 68, 0.5);">
+                        🎄 Joyeux Noël ! 🎄
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-green-800/60 to-green-900/60 p-8 rounded-2xl border-2 border-yellow-400 mb-8 shadow-xl">
+                    <p class="text-white text-xl leading-relaxed text-center italic font-semibold" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                        "Que cette période des Fêtes apporte à vous et à vos proches 
+                        bonheur, santé et prospérité. Puisse l'esprit de Noël illuminer 
+                        votre cœur et votre foyer. ✨"
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-6 mb-8">
+                    <div class="flex flex-col items-center transform hover:scale-110 transition-transform">
+                        <i class="fas fa-tree text-green-400 text-4xl mb-2"></i>
+                        <span class="text-white font-semibold">Sapin</span>
+                    </div>
+                    <div class="flex flex-col items-center transform hover:scale-110 transition-transform">
+                        <i class="fas fa-candy-cane text-red-400 text-4xl mb-2"></i>
+                        <span class="text-white font-semibold">Sucre d'orge</span>
+                    </div>
+                    <div class="flex flex-col items-center transform hover:scale-110 transition-transform">
+                        <i class="fas fa-sleigh text-blue-300 text-4xl mb-2"></i>
+                        <span class="text-white font-semibold">Traîneau</span>
+                    </div>
+                    <div class="flex flex-col items-center transform hover:scale-110 transition-transform">
+                        <i class="fas fa-gift text-yellow-400 text-4xl mb-2"></i>
+                        <span class="text-white font-semibold">Cadeaux</span>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="space-y-4">
+                    <button 
+                        id="back-button" 
+                        class="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-bold rounded-xl shadow-xl text-xl flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105"
+                    >
+                        <i class="fas fa-redo text-2xl"></i>
+                        Souhaiter à une autre personne
+                    </button>
+                    
+                    <button 
+                        id="share-button" 
+                        class="w-full py-4 bg-gradient-to-r from-purple-600 to-purple-800 hover:from-purple-700 hover:to-purple-900 text-white font-bold rounded-xl shadow-xl text-xl flex items-center justify-center gap-3 transition-all duration-300 transform hover:scale-105"
+                    >
+                        <i class="fas fa-share-alt text-2xl"></i>
+                        Partager ce site de Noël
+                    </button>
+                </div>
+            </div>
+        </main>
+        
+        <!-- ==================== CHRISTMAS CHARACTERS ==================== -->
+        <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-4xl">
+            <div class="flex flex-col items-center transform hover:scale-110 transition-transform cursor-pointer">
+                <i class="fas fa-snowman text-5xl text-white mb-3"></i>
+                <span class="text-white text-base font-semibold">Bonhomme de neige</span>
+            </div>
+            <div class="flex flex-col items-center transform hover:scale-110 transition-transform cursor-pointer">
+                <i class="fas fa-star text-5xl text-yellow-300 mb-3 twinkle"></i>
+                <span class="text-white text-base font-semibold">Étoile brillante</span>
+            </div>
+            <div class="flex flex-col items-center transform hover:scale-110 transition-transform cursor-pointer">
+                <i class="fas fa-bell text-5xl text-yellow-400 mb-3"></i>
+                <span class="text-white text-base font-semibold">Cloche de Noël</span>
+            </div>
+            <div class="flex flex-col items-center transform hover:scale-110 transition-transform cursor-pointer">
+                <i class="fas fa-fireplace text-5xl text-orange-400 mb-3"></i>
+                <span class="text-white text-base font-semibold">Cheminée</span>
+            </div>
+        </div>
+        
+        <!-- ==================== FOOTER ==================== -->
+        <footer class="mt-12 text-center text-gray-300">
+            <p class="text-lg">
+                © 2024 - Site de vœux de Noël - Développé avec <i class="fas fa-heart text-red-500"></i> pour la magie de Noël
+            </p>
+            <p class="text-sm mt-2">
+                🎵 Profitez de la mélodie "Vive le vent" pour célébrer Noël
+            </p>
+        </footer>
+    </div>
+    
+    <!-- ==================== SHARE MODAL ==================== -->
+    <div id="share-modal" class="share-modal">
+        <div class="share-modal-content">
+            <div class="text-center mb-8">
+                <h3 class="text-3xl font-bold text-white mb-3" style="font-family: 'Mountains of Christmas', cursive;">
+                    <i class="fas fa-share-alt text-yellow-300 mr-2"></i>
+                    Partagez la joie de Noël !
+                </h3>
+                <p class="text-gray-200 text-lg">
+                    Envoyez ce site à vos amis et famille pour leur souhaiter un joyeux Noël
+                </p>
+            </div>
+            
+            <div class="space-y-3 mb-6">
+                <button id="whatsapp-share" class="share-btn whatsapp-btn">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    Partager sur WhatsApp
+                </button>
+                
+                <button id="facebook-share" class="share-btn facebook-btn">
+                    <i class="fab fa-facebook-f text-2xl"></i>
+                    Partager sur Facebook
+                </button>
+                
+                <button id="twitter-share" class="share-btn twitter-btn">
+                    <i class="fab fa-twitter text-2xl"></i>
+                    Partager sur Twitter
+                </button>
+                
+                <button id="email-share" class="share-btn email-btn">
+                    <i class="fas fa-envelope text-2xl"></i>
+                    Partager par Email
+                </button>
+                
+                <button id="copy-link" class="share-btn copy-link-btn">
+                    <i class="fas fa-copy text-2xl"></i>
+                    Copier le lien
+                </button>
+            </div>
+            
+            <div class="text-center">
+                <button id="close-share-modal" class="px-8 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-xl transition-colors font-semibold text-lg">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ==================== SCRIPTS ==================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script>
+        // ==================== DOM ELEMENTS ====================
+        const nameForm = document.getElementById('name-form');
+        const christmasForm = document.getElementById('christmas-form');
+        const christmasCard = document.getElementById('christmas-card');
+        const userNameElement = document.getElementById('user-name');
+        const nameInput = document.getElementById('name');
+        const backButton = document.getElementById('back-button');
+        const shareButton = document.getElementById('share-button');
+              
         /* Styles pour la carte de Noël */
         .christmas-card {
             background: linear-gradient(135deg, #1a472a 0%, #0f2d1c 50%, #1a472a 100%);
