@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joyeux Noël !</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap');
+        
+        body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #0f766e 100%);
+            overflow: hidden;
+            font-family: 'Mountains of Christmas', cursive;
+        }
+        
+        .snowflake {
+            position: absolute;
+            top: -10px;
+            color: white;
+            font-size: 1em;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+        
+        .glow {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.9),
+                         0 0 30px rgba(255, 255, 255, 0.7),
+                         0 0 45px rgba(255, 215, 0, 0.6);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1.2s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8) rotate(-5deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        
+        .shake {
+            animation: shake 1s ease-in-out infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-8deg); }
+            75% { transform: rotate(8deg); }
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .twinkle {
+            animation: twinkle 1.5s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Contrôles de musique */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .music-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .pause-btn {
+            background: linear-gradient(135deg, #eab308, #ca8a04);
+            color: white;
+        }
+
+        .stop-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .music-label {
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+    <div id="snowContainer"></div>
+    
+    <!-- Contrôles de musique -->
+    <div class="music-control">
+        <button id="playBtn" class="music-btn play-btn" title="Lecture">▶</button>
+        <button id="pauseBtn" class="music-btn pause-btn" title="Pause">⏸</button>
+        <button id="stopBtn" class="music-btn stop-btn" title="Stop">⏹</button>
+        <span class="music-label">🎵 Vive le vent</span>
+    </div>
+
+    <!-- Écran d'accueil -->
+    <div id="welcomeScreen" class="text-center fade-in">
+        <div class="bg-white/15 backdrop-blur-xl rounded-3xl p-14 shadow-2xl border-2 border-white/30 max-w-lg mx-4">
+            <div class="text-7xl mb-8 shake">🎄</div>
+            <h1 class="text-5xl font-bold text-white mb-6 glow">Joyeux Noël !</h1>
+            <p class="text-white/95 mb-10 text-xl leading-relaxed">Entrez votre prénom pour recevoir vos vœux personnalisés</p>
+            <input 
+                type="text" 
+                id="nameInput" 
+                placeholder="Votre prénom..." 
+                class="w-full px-8 py-4 rounded-full text-center text-xl font-semibold focus:outline-none focus:ring-4 focus:ring-yellow-400/60 mb-8 shadow-lg"
+            >
+            <button 
+                id="submitBtn"
+                class="w-full bg-gradient-to-r from-red-600 via-red-500 to-green-600 text-white font-bold py-4 px-8 rounded-full text-xl hover:scale-105 transition-all shadow-2xl pulse"
+            >
+                ✨ Découvrir mes vœux ✨
+            </button>
+        </div>
+    </div>
+    
+    <!-- Écran de vœux -->
+    <div id="greetingScreen" class="text-center hidden">
+        <div class="bg-white/15 backdrop-blur-xl rounded-3xl p-14 shadow-2xl border-2 border-white/30 max-w-3xl mx-4 fade-in">
+            <div class="text-9xl mb-8 float">🎅</div>
+            <h1 class="text-6xl font-bold text-white mb-4 glow" id="greetingText"></h1>
+            <p class="text-3xl text-yellow-300 mb-10 pulse">Joyeux Noël !</p>
+            <div class="text-white/95 text-xl space-y-5 mb-10 leading-relaxed">
+                <p>✨ Que cette période festive vous apporte joie et bonheur</p>
+                <p>🎁 Que tous vos rêves se réalisent</p>
+                <p>⭐ Passez de merveilleuses fêtes en famille</p>
+                <p>🎄 Que la magie de Noël illumine votre cœur</p>
+            </div>
+            <div class="flex gap-6 justify-center text-5xl mb-10">
+                <span class="animate-bounce twinkle">🎄</span>
+                <span class="animate-bounce twinkle" style="animation-delay: 0.2s">🎁</span>
+                <span class="animate-bounce twinkle" style="animation-delay: 0.4s">⛄</span>
+                <span class="animate-bounce twinkle" style="animation-delay: 0.6s">🌟</span>
+                <span class="animate-bounce twinkle" style="animation-delay: 0.8s">🔔</span>
+            </div>
+            <button 
+                id="restartBtn"
+                class="bg-white/25 text-white font-bold py-3 px-8 rounded-full hover:bg-white/35 transition-all text-lg shadow-lg hover:scale-105"
+            >
+                🔄 Recommencer
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script>
+        // Création de la neige
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * 100 + '%';
+            snowflake.style.animationDuration = Math.random() * 3 + 4 + 's';
+            snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+            snowflake.style.fontSize = Math.random() * 15 + 10 + 'px';
+            document.getElementById('snowContainer').appendChild(snowflake);
+            
+            setTimeout(() => snowflake.remove(), 8000);
+        }
+        
+        setInterval(createSnowflake, 150);
+        
+        // Musique "Vive le vent" avec Tone.js
+        let synth;
+        let part;
+        let isPlaying = false;
+        let isPaused = false;
+        
+        // Mélodie complète de "Vive le vent" (Jingle Bells)
+        const viveLeVentMelody = [
+            // "Vive le vent, vive le vent"
+            { note: "E4", duration: "4n", time: 0 },
+            { note: "E4", duration: "4n", time: 0.5 },
+            { note: "E4", duration: "2n", time: 1 },
+            
+            // "Vive le vent d'hiver"
+            { note: "E4", duration: "4n", time: 2 },
+            { note: "E4", duration: "4n", time: 2.5 },
+            { note: "E4", duration: "2n", time: 3 },
+            
+            // "Qui s'en va sifflant, soufflant"
+            { note: "E4", duration: "4n", time: 4 },
+            { note: "G4", duration: "4n", time: 4.5 },
+            { note: "C4", duration: "4n", time: 5 },
+            { note: "D4", duration: "4n", time: 5.5 },
+            { note: "E4", duration: "2n", time: 6 },
+            
+            // "Dans les grands sapins verts"
+            { note: "F4", duration: "4n", time: 7.5 },
+            { note: "F4", duration: "4n", time: 8 },
+            { note: "F4", duration: "4n", time: 8.5 },
+            { note: "F4", duration: "4n", time: 9 },
+            
+            { note: "F4", duration: "4n", time: 9.5 },
+            { note: "E4", duration: "4n", time: 10 },
+            { note: "E4", duration: "4n", time: 10.5 },
+            { note: "E4", duration: "8n", time: 11 },
+            { note: "E4", duration: "8n", time: 11.25 },
+            
+            // Fin du couplet
+            { note: "E4", duration: "4n", time: 11.5 },
+            { note: "D4", duration: "4n", time: 12 },
+            { note: "D4", duration: "4n", time: 12.5 },
+            { note: "E4", duration: "4n", time: 13 },
+            { note: "D4", duration: "2n", time: 13.5 },
+            { note: "G4", duration: "2n", time: 14.5 },
+            
+            // Refrain "Vive le vent..."
+            { note: "E4", duration: "4n", time: 16 },
+            { note: "E4", duration: "4n", time: 16.5 },
+            { note: "E4", duration: "2n", time: 17 },
+            
+            { note: "E4", duration: "4n", time: 18 },
+            { note: "E4", duration: "4n", time: 18.5 },
+            { note: "E4", duration: "2n", time: 19 },
+            
+            { note: "E4", duration: "4n", time: 20 },
+            { note: "G4", duration: "4n", time: 20.5 },
+            { note: "C4", duration: "4n", time: 21 },
+            { note: "D4", duration: "4n", time: 21.5 },
+            { note: "E4", duration: "2n", time: 22 },
+            
+            { note: "F4", duration: "4n", time: 23.5 },
+            { note: "F4", duration: "4n", time: 24 },
+            { note: "F4", duration: "4n", time: 24.5 },
+            { note: "F4", duration: "4n", time: 25 },
+            
+            { note: "F4", duration: "4n", time: 25.5 },
+            { note: "E4", duration: "4n", time: 26 },
+            { note: "E4", duration: "4n", time: 26.5 },
+            { note: "E4", duration: "8n", time: 27 },
+            { note: "E4", duration: "8n", time: 27.25 },
+            
+            { note: "G4", duration: "4n", time: 27.5 },
+            { note: "G4", duration: "4n", time: 28 },
+            { note: "F4", duration: "4n", time: 28.5 },
+            { note: "D4", duration: "4n", time: 29 },
+            { note: "C4", duration: "1n", time: 29.5 }
+        ];
+        
+        function playViveLeVent() {
+            if (isPlaying && !isPaused) return;
+            
+            Tone.start();
+            
+            if (!synth) {
+                synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "triangle" },
+                    envelope: { 
+                        attack: 0.02, 
+                        decay: 0.2, 
+                        sustain: 0.4, 
+                        release: 0.8 
+                    }
+                }).toDestination();
+                
+                // Ajouter de la réverbération
+                const reverb = new Tone.Reverb({
+                    decay: 1.5,
+                    wet: 0.3
+                }).toDestination();
+                synth.connect(reverb);
+            }
+            
+            if (!part) {
+                part = new Tone.Part((time, note) => {
+                    synth.triggerAttackRelease(note.note, note.duration, time);
+                }, viveLeVentMelody);
+                
+                part.loop = true;
+                part.loopEnd = "32m";
+            }
+            
+            if (isPaused) {
+                Tone.Transport.start();
+                isPaused = false;
+            } else {
+                part.start(0);
+                Tone.Transport.bpm.value = 140;
+                Tone.Transport.start();
+            }
+            
+            isPlaying = true;
+        }
+        
+        function pauseMusic() {
+            if (isPlaying && !isPaused) {
+                Tone.Transport.pause();
+                isPaused = true;
+            }
+        }
+        
+        function stopMusic() {
+            if (isPlaying) {
+                Tone.Transport.stop();
+                Tone.Transport.cancel();
+                if (part) {
+                    part.stop();
+                }
+                isPlaying = false;
+                isPaused = false;
+            }
+        }
+        
+        // Gestion des écrans
+        const nameInput = document.getElementById('nameInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const greetingScreen = document.getElementById('greetingScreen');
+        const greetingText = document.getElementById('greetingText');
+        const restartBtn = document.getElementById('restartBtn');
+        const playBtn = document.getElementById('playBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        submitBtn.addEventListener('click', () => {
+            const name = nameInput.value.trim();
+            if (name) {
+                greetingText.textContent = `${name}, nous vous souhaitons un`;
+                welcomeScreen.classList.add('hidden');
+                greetingScreen.classList.remove('hidden');
+                playViveLeVent();
+            } else {
+                nameInput.focus();
+                nameInput.classList.add('ring-4', 'ring-red-500');
+                setTimeout(() => {
+                    nameInput.classList.remove('ring-4', 'ring-red-500');
+                }, 1000);
+            }
+        });
+        
+        nameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitBtn.click();
+            }
+        });
+        
+        restartBtn.addEventListener('click', () => {
+            greetingScreen.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+            nameInput.value = '';
+            nameInput.focus();
+        });
+        
+        // Contrôles de musique
+        playBtn.addEventListener('click', playViveLeVent);
+        pauseBtn.addEventListener('click', pauseMusic);
+        stopBtn.addEventListener('click', stopMusic);
+        
+        // Focus automatique
+        nameInput.focus();
+    </script>
+</body>
+</html>
